@@ -1,37 +1,20 @@
-const {readFile, writeFile} = require('fs')
+const http = require('http');
 
-const promiseReadFile = (path)=>{
-    return  new Promise ((resolve , reject)=>{
-        readFile(path,'utf8',(err,data)=>{
-            if (err){
-                reject(err)
-            }else{
-            resolve(data)
-            }
-        })
-    })
-}
-const promiseWriteFile = (path,content)=>{
-    return  new Promise ((resolve , reject)=>{
-        writeFile(path, content ,{encoding : 'utf8', flag : 'a'},(err)=>{
-            if (err){
-                reject(err)
-            }else{
-                resolve()
-            }
-        })
-    })
-}
+const server= http.createServer()
 
-const start = async()=>{
-    try {
-         const first = await promiseReadFile('./content/first.txt')
-         const second = await promiseReadFile('./content/second.txt')
-         await promiseWriteFile('./content/subfolder/revision-2.txt',`${first} ${second} `)
-    } catch (error) {
-        console.log(error);
-        
+    server.on('request',(req,res)=>{
+    if(req.url=='/'){
+        res.end('Welcome to our homepage')
     }
-}
-
-start()
+    else if(req.url=='/about'){
+        res.end('Here is a short intro of ours')
+    }
+    else {res.end(`
+       <h1>Oops!</h1>
+       <p>cant find that !</p> 
+       <a href="/">back home</a>
+       `
+    )
+    }
+})
+server.listen(5000)
