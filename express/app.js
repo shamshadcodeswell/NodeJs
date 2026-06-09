@@ -1,9 +1,13 @@
 const express = require('express');
 const app = express()
 const logger = require('./logger.js')
+const morgan = require('morgan')
 
 
-app.use('/about',logger)
+
+app.use(morgan('tiny'))
+
+// app.use('/about',logger)
 
 app.get('/',(req,res)=>{
     res.send('<h1>homepage</h1>')
